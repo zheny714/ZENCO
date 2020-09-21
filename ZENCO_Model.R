@@ -18,7 +18,7 @@ sim.Z <- function(t0, t1){
   N <- 1000
   phi <- c(4,4) 
   mu <- c(15,15)
-  lambda0 <- 0.1 # mean of poisson
+  lambda0 <- 1e-10 # mean of poisson
   b0 = 0.1401 # parameter of dropout rate
   b1 = -0.02393 # can be fitted from real data 
   tau0 = t0
@@ -129,7 +129,7 @@ fun2 <- function(dat){
   
   x[i] ~ dpois(lmd3[i])
   h[i] ~ dgamma(inverphi3, inverphi3)
-  lmd3[i] <- ifelse(p3[i]==0, h[i]*mu3, 0.1)
+  lmd3[i] <- ifelse(p3[i]==0, h[i]*mu3, 1e-10)
   
   
   rho_tmp[i] <- ifelse(p3[i]==0, ((exp(tau0+tau1*x[i])-1)/(exp(tau0+tau1*x[i])+1)), (exp(tau0+tau1*mu3)-1)/(exp(tau0+tau1*mu3)+1))
@@ -142,7 +142,7 @@ fun2 <- function(dat){
   
   for (j in 1:2){
   Y[i,j] ~ dpois(lambda[i,j])
-  lambda[i,j] <- ifelse(p[i,j]==0, qgamma(pnorm(Z[i,j],0,1),inverphi[j],inverphi[j])*mu[j], 0.1)
+  lambda[i,j] <- ifelse(p[i,j]==0, qgamma(pnorm(Z[i,j],0,1),inverphi[j],inverphi[j])*mu[j], 1e-10)
   }
   }
   tau0 ~ dnorm(0, 250)
